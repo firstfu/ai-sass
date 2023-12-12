@@ -2,7 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    // 開啟全文搜索
+    previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -14,4 +16,29 @@ datasource db {
 model Category {
     id   String @id @default(uuid())
     name String
+
+    campanions Campanion[]
+}
+
+model Campanion {
+    id           String @id @default(uuid())
+    userId       String
+    userName     String
+    src          String
+    name         String @db.Text
+    description  String
+    instructions String @db.Text
+    // 指令
+    seed         String @db.Text
+
+    category   Category? @relation(fields: [categoryId], references: [id])
+    categoryId String?
+
+    // 建立时间
+    createdAt DateTime @default(now())
+    // 更新时间
+    updatedAt DateTime @updatedAt
+
+    @@index([categoryId])
+    @@fulltext([name])
 }
