@@ -17,10 +17,10 @@ model Category {
     id   String @id @default(uuid())
     name String
 
-    campanions Campanion[]
+    companions Companion[]
 }
 
-model Campanion {
+model Companion {
     id           String @id @default(uuid())
     userId       String
     userName     String
@@ -31,8 +31,8 @@ model Campanion {
     // 指令
     seed         String @db.Text
 
-    category   Category? @relation(fields: [categoryId], references: [id])
-    categoryId String?
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String
 
     // 建立时间
     createdAt DateTime @default(now())
