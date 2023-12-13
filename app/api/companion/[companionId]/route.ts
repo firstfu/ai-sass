@@ -2,14 +2,17 @@ import prismadb from "@/lib/prismadb";
 import { currentUser } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest, { params }: { params: { companionId: string } }) {
   try {
+    console.log("🚀 ~ file: route.ts:6 ~ PATCH ~ params:", params);
+
     const body = await req.json();
     const user = await currentUser();
     const { src, name, description, instructions, seed, categoryId } = body;
 
-    console.log("🚀 ~ file: route.ts:7 ~ POST ~ body:", body);
-    console.log("🚀 ~ file: route.ts:8 ~ POST ~ user:", user);
+    if (!params.companionId) {
+      return new NextResponse("Missing companionId", { status: 400 });
+    }
 
     if (!user || !user.id || !user.firstName) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -20,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     // TODO: check for subscription
 
-    const companion = await prismadb.companion.create({
+    const companion = await prismadb.companion.update({
       data: {
         categoryId,
         userId: user.id,
@@ -30,6 +33,9 @@ export async function POST(req: NextRequest) {
         description,
         instructions,
         seed,
+      },
+      where: {
+        id: params.companionId,
       },
     });
 

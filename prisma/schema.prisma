@@ -39,6 +39,25 @@ model Companion {
     // 更新时间
     updatedAt DateTime @updatedAt
 
+    messages Message[]
+
     @@index([categoryId])
     @@fulltext([name])
+}
+
+enum Role {
+    user
+    system
+}
+
+model Message {
+    id      String @id @default(uuid())
+    role    Role
+    content String @db.Text
+    userId  String
+
+    companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
+    companionId String
+
+    @@index([companionId])
 }

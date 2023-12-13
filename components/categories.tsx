@@ -11,11 +11,10 @@ interface CategoriesProps {
 }
 
 export default function Categories({ data }: CategoriesProps) {
+  //   console.log("🚀 ~ file: categories.tsx:14 ~ Categories ~ data:", data);
   const route = useRouter();
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("categoryId");
-
-  console.log("🚀 ~ file: categories.tsx:15 ~ Categories ~ searchParams:", searchParams);
 
   const onClick = (id: string | undefined) => {
     const query = {
