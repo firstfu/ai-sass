@@ -59,5 +59,10 @@ model Message {
     companion   Companion @relation(fields: [companionId], references: [id], onDelete: Cascade)
     companionId String
 
+    // 建立时间
+    createdAt DateTime @default(now())
+    // 更新时间
+    updatedAt DateTime @updatedAt
+
     @@index([companionId])
 }
