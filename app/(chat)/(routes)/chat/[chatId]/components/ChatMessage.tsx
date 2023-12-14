@@ -21,8 +21,6 @@ export default function ChatMessage({ role, content, isLoading, src }: ChatMessa
   const { toast } = useToast();
   const { theme } = useTheme();
 
-  console.log("theme", theme);
-
   const onCopy = () => {
     if (!content) return;
     navigator.clipboard.writeText(content);

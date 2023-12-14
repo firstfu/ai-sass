@@ -1,9 +1,8 @@
 import prismadb from "@/lib/prismadb";
 import { auth, redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-
 import React from "react";
-import ChatClient from "./components/chat-client";
+import ChatClient from "./components/ChatClient";
 
 interface ChatIdPageProps {
   params: {
@@ -13,8 +12,6 @@ interface ChatIdPageProps {
 
 export default async function ChatIdPage({ params }: ChatIdPageProps) {
   const { userId } = auth();
-  console.log("auth:", auth());
-  console.log("userId", userId);
 
   //   沒有登路的話，就導向登入頁面
   if (!userId) {

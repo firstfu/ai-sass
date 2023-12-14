@@ -1,7 +1,7 @@
 "use client";
 
 import { Companion } from "@prisma/client";
-import React, { useEffect, useState } from "react";
+import React, { ElementRef, useEffect, useRef, useState } from "react";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
 
 interface ChatMessagesProps {
@@ -11,9 +11,9 @@ interface ChatMessagesProps {
 }
 
 export default function ChatMessages({ companion, isLoading, messages = [] }: ChatMessagesProps) {
-  const [fakeLoading, setFakeLoading] = useState(messages.length === 0 ? true : false);
+  const scrollRef = useRef<ElementRef<"div">>(null);
 
-  console.log("messages>>>>>>>>>>>>>>>>:", messages);
+  const [fakeLoading, setFakeLoading] = useState(messages.length === 0 ? true : false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -21,6 +21,11 @@ export default function ChatMessages({ companion, isLoading, messages = [] }: Ch
     }, 1000);
     return () => clearTimeout(timeout);
   }, []);
+
+  //   TODO: 可以改成只依赖 messages?
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages.length]);
 
   return (
     <div className="flex-1 overflow-y-auto  pr-4 ">
@@ -30,6 +35,7 @@ export default function ChatMessages({ companion, isLoading, messages = [] }: Ch
         <ChatMessage key={index} role={message.role} content={message.content} src={message.src} />
       ))}
       {isLoading && <ChatMessage role="system" src={companion.src} isLoading />}
+      <div ref={scrollRef}></div>
     </div>
   );
 }
