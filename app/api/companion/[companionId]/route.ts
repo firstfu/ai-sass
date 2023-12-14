@@ -36,6 +36,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { companionI
       },
       where: {
         id: params.companionId,
+        userId: user.id,
       },
     });
 
