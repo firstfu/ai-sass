@@ -9,6 +9,7 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { Redis } from "@upstash/redis";
+import { as } from "@upstash/redis/zmscore-415f6c9f";
 
 export type CompanionKey = {
   companionName: string;
@@ -36,7 +37,7 @@ export class MemoryManager {
   }
 
   public async vectorSearch(recentChatHistory: string, companionFileName: string) {
-    const pineconeClient = <Pinecone>this.vectorDBClient;
+    const pineconeClient = this.vectorDBClient as Pinecone;
     const pineconeIndex = pineconeClient.Index(process.env.PINECONE_INDEX! || "");
 
     const vectorStore = await PineconeStore.fromExistingIndex(new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY }), {
